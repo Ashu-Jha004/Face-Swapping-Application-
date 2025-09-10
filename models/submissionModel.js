@@ -262,9 +262,8 @@ class SubmissionModel {
   }
 
   /**
-   * Get submission by ID
-   * @param {string} id - Submission ID
-   * @returns {Promise<Object>} - Submission record
+   * @param {string} id 
+   * @returns {Promise<Object>} 
    */
   async getSubmissionById(id) {
     try {
@@ -284,8 +283,8 @@ class SubmissionModel {
 
   /**
    * Delete submission by ID
-   * @param {string} id - Submission ID
-   * @returns {Promise<boolean>} - Success status
+   * @param {string} id 
+   * @returns {Promise<boolean>}
    */
   async deleteSubmission(id) {
     try {

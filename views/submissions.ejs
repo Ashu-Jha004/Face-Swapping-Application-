@@ -23,6 +23,7 @@
         text-align: center;
         margin-bottom: 25px;
         color: #333;
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
       }
       .stats-bar {
         background-color: #e3f2fd;
@@ -38,7 +39,7 @@
         text-align: center;
       }
       .stat-number {
-        font-size: 1.8rem;
+        font-size: clamp(1.4rem, 4vw, 1.8rem);
         font-weight: 700;
         color: #5271ff;
         display: block;
@@ -61,44 +62,123 @@
         padding: 40px;
         font-size: 1.1rem;
       }
-      table {
+
+      /* DESKTOP TABLE LAYOUT */
+      .table-container {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 25px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      }
+
+      .desktop-table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 25px;
-        overflow-x: auto;
-        display: block;
-        white-space: nowrap;
+        min-width: 800px; /* Ensures table doesn't compress too much */
+        background: white;
       }
-      thead,
-      tbody,
-      tr {
-        display: table;
-        width: 100%;
-        table-layout: fixed;
-      }
-      th,
-      td {
-        border: 1.5px solid #ddd;
+
+      .desktop-table th,
+      .desktop-table td {
+        border: 1px solid #ddd;
         padding: 12px 8px;
         text-align: center;
         vertical-align: middle;
-        word-wrap: break-word;
       }
-      th {
+
+      .desktop-table th {
         background: #5271ff;
         color: white;
         font-weight: 600;
         position: sticky;
         top: 0;
+        z-index: 10;
+        white-space: nowrap;
       }
-      td {
+
+      .desktop-table td {
         font-size: 0.9rem;
+        word-wrap: break-word;
       }
-      tr:nth-child(even) {
+
+      .desktop-table tr:nth-child(even) {
         background-color: #f8f9fa;
       }
 
-      /* ✅ Enhanced clickable submission rows */
+      /* MOBILE CARD LAYOUT */
+      .mobile-cards {
+        display: none;
+      }
+
+      .submission-card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .submission-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(82, 113, 255, 0.15);
+        border-color: #5271ff;
+      }
+
+      .card-header {
+        border-bottom: 2px solid #e3f2fd;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+      }
+
+      .card-name {
+        color: #5271ff;
+        font-size: 1.2rem;
+        font-weight: 700;
+        text-decoration: none;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .card-name:hover {
+        text-decoration: underline;
+      }
+
+      .card-date {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .card-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      .card-row:last-child {
+        border-bottom: none;
+      }
+
+      .card-label {
+        font-weight: 600;
+        color: #333;
+        font-size: 0.9rem;
+        min-width: 80px;
+      }
+
+      .card-value {
+        flex: 1;
+        text-align: right;
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      /* Enhanced clickable submission rows */
       .submission-row {
         cursor: pointer;
         transition: all 0.3s ease;
@@ -209,10 +289,14 @@
       nav.pagination {
         text-align: center;
         margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 5px;
       }
+
       nav.pagination a,
       nav.pagination span {
-        margin: 0 5px;
         padding: 8px 16px;
         border: 2px solid #5271ff;
         border-radius: 8px;
@@ -223,20 +307,28 @@
         display: inline-block;
         transition: all 0.3s ease;
       }
+
       nav.pagination a:hover,
       nav.pagination span.active {
         background-color: #5271ff;
         color: white;
       }
+
       nav.pagination span.disabled {
         border-color: #ccc;
         color: #ccc;
         cursor: not-allowed;
       }
+
       .actions {
         text-align: center;
         margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
       }
+
       .btn {
         background-color: #5271ff;
         color: white;
@@ -247,30 +339,12 @@
         font-weight: 600;
         display: inline-block;
         transition: background-color 0.3s ease;
-        margin: 0 5px;
       }
+
       .btn:hover {
         background-color: #3a54d1;
       }
-      @media (max-width: 768px) {
-        .container {
-          padding: 20px 15px;
-        }
-        table {
-          font-size: 0.8rem;
-        }
-        th,
-        td {
-          padding: 8px 4px;
-        }
-        .stats-bar {
-          gap: 15px;
-        }
 
-        .submission-row {
-          cursor: pointer;
-        }
-      }
       /* Universal Navigation Styles */
       .app-navigation {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -286,6 +360,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 15px 20px;
+        flex-wrap: wrap;
       }
 
       .nav-brand {
@@ -306,6 +381,7 @@
         display: flex;
         gap: 8px;
         align-items: center;
+        flex-wrap: wrap;
       }
 
       .nav-link {
@@ -317,6 +393,7 @@
         font-size: 0.9rem;
         transition: all 0.3s ease;
         border: 2px solid transparent;
+        white-space: nowrap;
       }
 
       .nav-link:hover {
@@ -331,8 +408,25 @@
         border-color: rgba(255, 255, 255, 0.3);
       }
 
-      /* Responsive Navigation */
+      /* RESPONSIVE BREAKPOINTS */
       @media (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+
+        .container {
+          padding: 20px 15px;
+        }
+
+        /* Hide desktop table, show mobile cards */
+        .desktop-table {
+          display: none;
+        }
+
+        .mobile-cards {
+          display: block;
+        }
+
         .nav-container {
           flex-direction: column;
           gap: 15px;
@@ -340,7 +434,6 @@
         }
 
         .nav-links {
-          flex-wrap: wrap;
           justify-content: center;
           gap: 6px;
         }
@@ -348,6 +441,45 @@
         .nav-link {
           padding: 6px 12px;
           font-size: 0.8rem;
+        }
+
+        .stats-bar {
+          gap: 15px;
+          padding: 15px 10px;
+        }
+
+        .actions {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .btn {
+          width: 100%;
+          max-width: 300px;
+        }
+
+        nav.pagination {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        nav.pagination a,
+        nav.pagination span {
+          width: 100%;
+          max-width: 200px;
+          margin: 0 auto;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .card-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 5px;
+        }
+
+        .card-value {
+          text-align: left;
         }
       }
     </style>
@@ -391,12 +523,12 @@
 
       <h1>📊 Face Swap Submissions</h1>
 
-      <!-- ✅ FIXED - Safe error checking -->
+      <!-- Error checking -->
       <% if (typeof error !== 'undefined' && error) { %>
       <div class="error-message">⚠️ <%= error %></div>
       <% } %>
 
-      <!-- ✅ FIXED - Safe stats checking -->
+      <!-- Stats checking -->
       <% if (typeof stats !== 'undefined' && stats) { %>
       <div class="stats-bar">
         <div class="stat-item">
@@ -422,7 +554,7 @@
         <a href="/admin/status" class="btn">🔧 API Status</a>
       </div>
 
-      <!-- ✅ FIXED - Safe submissions checking -->
+      <!-- Submissions checking -->
       <% if (typeof submissions === 'undefined' || !submissions ||
       submissions.length === 0) { %>
       <div class="no-results">
@@ -430,128 +562,211 @@
         <a href="/" class="btn">Create First Submission</a>
       </div>
       <% } else { %>
-      <table>
-        <thead>
-          <tr>
-            <th style="width: 15%">👤 Name</th>
-            <th style="width: 20%">📧 Email</th>
-            <th style="width: 12%">📱 Phone</th>
-            <th style="width: 12%">📸 Source</th>
-            <th style="width: 12%">🎭 Target</th>
-            <th style="width: 12%">✨ Result</th>
-            <th style="width: 17%">📅 Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% submissions.forEach(sub => { %>
-          <tr class="submission-row" data-href="/submissions/<%= sub._id %>">
-            <td>
-              <!-- ✅ Primary clickable name link -->
-              <a href="/submissions/<%= sub._id %>" class="name-link">
-                <strong><%= sub.name %></strong>
-              </a>
-              <div class="submission-preview">
-                <small>📋 Click to view full details</small>
-              </div>
-            </td>
-            <td>
-              <a href="/submissions/<%= sub._id %>" class="email-link">
-                <%= sub.email %>
-              </a>
-            </td>
-            <td>
-              <a href="/submissions/<%= sub._id %>" class="phone-link">
-                <%= sub.phone %>
-              </a>
-            </td>
-            <td>
+
+      <!-- DESKTOP TABLE VIEW -->
+      <div class="table-container">
+        <table class="desktop-table">
+          <thead>
+            <tr>
+              <th style="width: 15%">👤 Name</th>
+              <th style="width: 20%">📧 Email</th>
+              <th style="width: 12%">📱 Phone</th>
+              <th style="width: 12%">📸 Source</th>
+              <th style="width: 12%">🎭 Target</th>
+              <th style="width: 12%">✨ Result</th>
+              <th style="width: 17%">📅 Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% submissions.forEach(sub => { %>
+            <tr class="submission-row" data-href="/submissions/<%= sub._id %>">
+              <td>
+                <a href="/submissions/<%= sub._id %>" class="name-link">
+                  <strong><%= sub.name %></strong>
+                </a>
+                <div class="submission-preview">
+                  <small>📋 Click to view full details</small>
+                </div>
+              </td>
+              <td>
+                <a href="/submissions/<%= sub._id %>" class="email-link">
+                  <%= sub.email %>
+                </a>
+              </td>
+              <td>
+                <a href="/submissions/<%= sub._id %>" class="phone-link">
+                  <%= sub.phone %>
+                </a>
+              </td>
+              <td>
+                <% if (sub.sourceImage && sub.sourceImage.url) { %>
+                <div class="action-buttons">
+                  <a
+                    href="/submissions/<%= sub._id %>"
+                    class="view-btn"
+                    title="View Details"
+                  >
+                    👁️ View
+                  </a>
+                  <a
+                    href="/download/<%= sub._id %>/source"
+                    class="download-link"
+                    onclick="event.stopPropagation();"
+                  >
+                    📥 Download
+                  </a>
+                </div>
+                <% } else { %>
+                <a href="/submissions/<%= sub._id %>" class="view-link">
+                  <span style="color: #999">N/A - View Details</span>
+                </a>
+                <% } %>
+              </td>
+              <td>
+                <% if (sub.targetImage && sub.targetImage.url) { %>
+                <div class="action-buttons">
+                  <a
+                    href="/submissions/<%= sub._id %>"
+                    class="view-btn"
+                    title="View Details"
+                  >
+                    👁️ View
+                  </a>
+                  <a
+                    href="/download/<%= sub._id %>/target"
+                    class="download-link"
+                    onclick="event.stopPropagation();"
+                  >
+                    📥 Download
+                  </a>
+                </div>
+                <% } else { %>
+                <a href="/submissions/<%= sub._id %>" class="view-link">
+                  <span style="color: #999">N/A - View Details</span>
+                </a>
+                <% } %>
+              </td>
+              <td>
+                <% if (sub.swappedImage && sub.swappedImage.url) { %>
+                <div class="action-buttons">
+                  <a
+                    href="/submissions/<%= sub._id %>"
+                    class="view-btn"
+                    title="View Details"
+                  >
+                    👁️ View
+                  </a>
+                  <a
+                    href="/download/<%= sub._id %>/swapped"
+                    class="download-link"
+                    onclick="event.stopPropagation();"
+                  >
+                    📥 Download
+                  </a>
+                </div>
+                <% } else { %>
+                <a href="/submissions/<%= sub._id %>" class="view-link">
+                  <span style="color: #999">Processing - View Details</span>
+                </a>
+                <% } %>
+              </td>
+              <td>
+                <a href="/submissions/<%= sub._id %>" class="date-link">
+                  <%= new Date(sub.createdAt).toLocaleDateString() %><br />
+                  <small
+                    ><%= new Date(sub.createdAt).toLocaleTimeString() %></small
+                  >
+                </a>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- MOBILE CARD VIEW -->
+      <div class="mobile-cards">
+        <% submissions.forEach(sub => { %>
+        <div
+          class="submission-card"
+          onclick="window.location.href='/submissions/<%= sub._id %>'"
+        >
+          <div class="card-header">
+            <a href="/submissions/<%= sub._id %>" class="card-name">
+              <%= sub.name %>
+            </a>
+            <div class="card-date">
+              📅 <%= new Date(sub.createdAt).toLocaleDateString() %> • <%= new
+              Date(sub.createdAt).toLocaleTimeString() %>
+            </div>
+          </div>
+
+          <div class="card-row">
+            <span class="card-label">📧 Email:</span>
+            <span class="card-value"><%= sub.email %></span>
+          </div>
+
+          <div class="card-row">
+            <span class="card-label">📱 Phone:</span>
+            <span class="card-value"><%= sub.phone %></span>
+          </div>
+
+          <div class="card-row">
+            <span class="card-label">📸 Source:</span>
+            <span class="card-value">
               <% if (sub.sourceImage && sub.sourceImage.url) { %>
-              <div class="action-buttons">
-                <a
-                  href="/submissions/<%= sub._id %>"
-                  class="view-btn"
-                  title="View Details"
-                >
-                  👁️ View
-                </a>
-                <a
-                  href="/download/<%= sub._id %>/source"
-                  class="download-link"
-                  onclick="event.stopPropagation();"
-                >
-                  📥 Download
-                </a>
-              </div>
-              <% } else { %>
-              <a href="/submissions/<%= sub._id %>" class="view-link">
-                <span style="color: #999">N/A - View Details</span>
+              <a
+                href="/download/<%= sub._id %>/source"
+                class="download-link"
+                onclick="event.stopPropagation();"
+              >
+                📥 Download
               </a>
+              <% } else { %>
+              <span style="color: #999">N/A</span>
               <% } %>
-            </td>
-            <td>
+            </span>
+          </div>
+
+          <div class="card-row">
+            <span class="card-label">🎭 Target:</span>
+            <span class="card-value">
               <% if (sub.targetImage && sub.targetImage.url) { %>
-              <div class="action-buttons">
-                <a
-                  href="/submissions/<%= sub._id %>"
-                  class="view-btn"
-                  title="View Details"
-                >
-                  👁️ View
-                </a>
-                <a
-                  href="/download/<%= sub._id %>/target"
-                  class="download-link"
-                  onclick="event.stopPropagation();"
-                >
-                  📥 Download
-                </a>
-              </div>
-              <% } else { %>
-              <a href="/submissions/<%= sub._id %>" class="view-link">
-                <span style="color: #999">N/A - View Details</span>
+              <a
+                href="/download/<%= sub._id %>/target"
+                class="download-link"
+                onclick="event.stopPropagation();"
+              >
+                📥 Download
               </a>
+              <% } else { %>
+              <span style="color: #999">N/A</span>
               <% } %>
-            </td>
-            <td>
+            </span>
+          </div>
+
+          <div class="card-row">
+            <span class="card-label">✨ Result:</span>
+            <span class="card-value">
               <% if (sub.swappedImage && sub.swappedImage.url) { %>
-              <div class="action-buttons">
-                <a
-                  href="/submissions/<%= sub._id %>"
-                  class="view-btn"
-                  title="View Details"
-                >
-                  👁️ View
-                </a>
-                <a
-                  href="/download/<%= sub._id %>/swapped"
-                  class="download-link"
-                  onclick="event.stopPropagation();"
-                >
-                  📥 Download
-                </a>
-              </div>
+              <a
+                href="/download/<%= sub._id %>/swapped"
+                class="download-link"
+                onclick="event.stopPropagation();"
+              >
+                📥 Download
+              </a>
               <% } else { %>
-              <a href="/submissions/<%= sub._id %>" class="view-link">
-                <span style="color: #999">Processing - View Details</span>
-              </a>
+              <span style="color: #999">Processing...</span>
               <% } %>
-            </td>
-            <td>
-              <a href="/submissions/<%= sub._id %>" class="date-link">
-                <%= new Date(sub.createdAt).toLocaleDateString() %><br />
-                <small
-                  ><%= new Date(sub.createdAt).toLocaleTimeString() %></small
-                >
-              </a>
-            </td>
-          </tr>
-          <% }) %>
-        </tbody>
-      </table>
+            </span>
+          </div>
+        </div>
+        <% }) %>
+      </div>
       <% } %>
 
       <nav class="pagination" aria-label="Submissions Pagination">
-        <!-- ✅ FIXED - Safe pagination variable checking -->
         <% if (typeof hasPrevPage !== 'undefined' && hasPrevPage) { %>
         <a href="/submissions?page=<%= prevPage %>">&larr; Previous</a>
         <% } else { %>
@@ -571,22 +786,20 @@
       </nav>
     </div>
 
-    <!-- ✅ Enhanced JavaScript for row clicking -->
+    <!-- Enhanced JavaScript for row clicking -->
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        // Make entire table rows clickable
+        // Make entire table rows clickable (desktop)
         const submissionRows = document.querySelectorAll(".submission-row");
 
         submissionRows.forEach((row) => {
           const href = row.getAttribute("data-href");
 
           row.addEventListener("click", function (e) {
-            // Don't navigate if clicking on download links
             if (e.target.closest(".download-link")) {
               return;
             }
 
-            // Navigate to submission details
             if (href) {
               window.location.href = href;
             }
@@ -605,7 +818,6 @@
             }
           });
 
-          // Make rows focusable
           row.setAttribute("tabindex", "0");
         });
       });

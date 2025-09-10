@@ -313,7 +313,6 @@ class SubmissionController {
         });
       }
 
-      // ✅ FIXED - Use MongoDB native ObjectId validation
       if (!ObjectId.isValid(id)) {
         return res.status(400).json({
           error: "Invalid submission ID format",
@@ -364,8 +363,6 @@ class SubmissionController {
           timestamp: new Date().toISOString(),
         });
       }
-
-      // Add Cloudinary download parameter if it's a Cloudinary URL
       let downloadUrl = imageData.url;
       if (downloadUrl.includes("cloudinary.com")) {
         downloadUrl = imageData.url.replace(
@@ -411,8 +408,6 @@ class SubmissionController {
           timestamp: new Date().toISOString(),
         });
       }
-
-      // ✅ FIXED - Use MongoDB native ObjectId validation
       if (!ObjectId.isValid(id)) {
         return res.status(400).json({
           error: "Invalid submission ID format",
@@ -443,9 +438,6 @@ class SubmissionController {
     }
   }
 
-  /**
-   * Get API status for admin dashboard
-   */
   async getAPIStatus(req, res) {
     try {
       const isConfigured = faceSwapAPI.isConfigured();
