@@ -6,13 +6,11 @@ import fs from "fs";
 
 const router = express.Router();
 
-// Ensure uploads directory exists
 const uploadDir = path.join(process.cwd(), "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// Enhanced Multer configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
   filename: (req, file, cb) => {
@@ -23,21 +21,13 @@ const storage = multer.diskStorage({
   },
 });
 
-// File filter for strict image validation
 const fileFilter = (req, file, cb) => {
-  console.log(
-    `🔍 Validating file: ${file.originalname}, MIME: ${file.mimetype}`
-  );
-
   const allowedMimes = ["image/jpeg", "image/jpg", "image/png"];
   const allowedExts = [".jpg", ".jpeg", ".png"];
   const ext = path.extname(file.originalname).toLowerCase();
-
   if (allowedMimes.includes(file.mimetype) && allowedExts.includes(ext)) {
-    console.log(`✅ File validation passed: ${file.originalname}`);
     cb(null, true);
   } else {
-    console.log(`❌ File validation failed: ${file.originalname}`);
     cb(
       new Error(
         `Invalid file type. Only JPEG, JPG, and PNG files are allowed. Received: ${file.mimetype}`
@@ -47,24 +37,19 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Configure multer with enhanced options
 const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 2 * 1024 * 1024, // 2MB limit
-    files: 2, // Maximum 2 files (source + target)
-    fields: 10, // Maximum form fields
+    fileSize: 2 * 1024 * 1024,
+    files: 2,
+    fields: 10,
   },
 });
 
-// Middleware for handling file upload errors
 const handleUploadErrors = (error, req, res, next) => {
-  console.error("📁 File upload error:", error);
-
   if (error instanceof multer.MulterError) {
     let errorMessage;
-
     switch (error.code) {
       case "LIMIT_FILE_SIZE":
         errorMessage =
@@ -84,7 +69,6 @@ const handleUploadErrors = (error, req, res, next) => {
       default:
         errorMessage = `File upload error: ${error.message}`;
     }
-
     return res.status(400).render("index", {
       error: errorMessage,
       swappedImage: null,
@@ -94,7 +78,6 @@ const handleUploadErrors = (error, req, res, next) => {
       currentPage: "home",
     });
   }
-
   if (error.message.includes("Invalid file type")) {
     return res.status(400).render("index", {
       error: error.message,
@@ -105,12 +88,9 @@ const handleUploadErrors = (error, req, res, next) => {
       currentPage: "home",
     });
   }
-
-  // Pass other errors to global error handler
   next(error);
 };
 
-// Middleware to validate required files are present
 const validateRequiredFiles = (req, res, next) => {
   if (!req.files) {
     return res.status(400).render("index", {
@@ -145,27 +125,21 @@ const validateRequiredFiles = (req, res, next) => {
     });
   }
 
-  console.log("✅ Required files validation passed");
   next();
 };
 
-// Rate limiting middleware
 const rateLimitMap = new Map();
 const rateLimit = (maxRequests = 10, windowMs = 15 * 60 * 1000) => {
   return (req, res, next) => {
     const ip = req.ip || req.connection.remoteAddress;
     const now = Date.now();
     const windowStart = now - windowMs;
-
     if (!rateLimitMap.has(ip)) {
       rateLimitMap.set(ip, []);
     }
-
     const requests = rateLimitMap.get(ip);
     const recentRequests = requests.filter((time) => time > windowStart);
-
     if (recentRequests.length >= maxRequests) {
-      console.warn(`⚠️ Rate limit exceeded for IP: ${ip}`);
       return res.status(429).render("index", {
         error: "Too many requests. Please wait a moment before trying again.",
         swappedImage: null,
@@ -175,48 +149,27 @@ const rateLimit = (maxRequests = 10, windowMs = 15 * 60 * 1000) => {
         currentPage: "home",
       });
     }
-
     recentRequests.push(now);
     rateLimitMap.set(ip, recentRequests);
     next();
   };
 };
 
-// Middleware to log request details
 const logRequest = (req, res, next) => {
   const timestamp = new Date().toISOString();
   const method = req.method;
   const url = req.originalUrl;
   const ip = req.ip || req.connection.remoteAddress;
-
-  console.log(`📝 ${timestamp} - ${method} ${url} from ${ip}`);
-
-  if (req.body && Object.keys(req.body).length > 0) {
-    const bodyKeys = Object.keys(req.body);
-    console.log(`📋 Form fields: ${bodyKeys.join(", ")}`);
-  }
-
   next();
 };
 
-// Apply global middleware to all routes
 router.use(logRequest);
 
-// ===============================
-// PUBLIC ROUTES
-// ===============================
-
-/**
- * GET / - Main form page
- */
 router.get("/", submissionController.renderForm);
 
-/**
- * ✅ FIXED - POST /submit - Handle form submission with face swap
- */
 router.post(
   "/submit",
-  rateLimit(5, 15 * 60 * 1000), // 5 requests per 15 minutes
+  rateLimit(5, 15 * 60 * 1000),
   upload.fields([
     { name: "source", maxCount: 1 },
     { name: "target", maxCount: 1 },
@@ -226,12 +179,8 @@ router.post(
   submissionController.handleSubmission
 );
 
-/**
- * GET /submissions - List all submissions
- */
 router.get("/submissions", submissionController.listSubmissions);
 router.get("/submit", (req, res) => {
-  console.log("⚠️ Direct GET access to /submit - redirecting to home");
   res.redirect(
     "/?error=" +
       encodeURIComponent(
@@ -240,54 +189,24 @@ router.get("/submit", (req, res) => {
   );
 });
 
-/**
- * GET /submissions/:id - View single submission details
- */
 router.get("/submissions/:id", submissionController.getSubmissionDetails);
 
-// ===============================
-// DOWNLOAD ROUTES
-// ===============================
-
-/**
- * GET /download/:id/:type - Download specific image
- */
 router.get(
   "/download/:id/:type",
   rateLimit(20, 15 * 60 * 1000),
   submissionController.downloadImage
 );
 
-// ===============================
-// ADMIN ROUTES
-// ===============================
-
-/**
- * DELETE /admin/submissions/:id - Delete submission
- */
 router.delete(
   "/admin/submissions/:id",
   rateLimit(10, 15 * 60 * 1000),
   submissionController.deleteSubmission
 );
 
-/**
- * GET /admin/status - API status check
- */
 router.get("/admin/status", submissionController.getAPIStatus);
 
-// ===============================
-// UTILITY ROUTES
-// ===============================
-
-/**
- * GET /health - Health check endpoint
- */
 router.get("/health", submissionController.healthCheck);
 
-/**
- * GET /api-test - Test API connectivity
- */
 router.get("/api-test", async (req, res) => {
   try {
     const faceSwapAPI = (await import("../utils/faceSwapApi.js")).default;
@@ -308,11 +227,5 @@ router.get("/api-test", async (req, res) => {
     });
   }
 });
-
-// ===============================
-// ✅ REMOVED PROBLEMATIC CATCH-ALL ROUTE
-// The /*catchall route was intercepting /submit requests
-// 404 handling should be done in app.js instead
-// ===============================
 
 export default router;

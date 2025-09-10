@@ -1,101 +1,89 @@
-🎭 AI Face Swap Application
-A web application that swaps faces between images using AI technology. Upload two photos and get a professional face-swapped result in minutes.
+FaceSwap Application:
+This is a web application that allows users to perform a face swap on two uploaded images. The application uses the LightX API for the face-swapping functionality, stores user submissions in a MongoDB database, and hosts images on Cloudinary.
 
-✨ Features
-AI-Powered Face Swapping - High-quality results using LightX API
+Features
+Face Swapping: Users can upload a source and a target image to generate a new image with the source face swapped onto the target.
 
-Multiple Upload Options - File upload or camera capture
+Submission Tracking: All face swap requests are logged and stored in a MongoDB database.
 
-Real-time Processing - Live progress tracking
+Image Hosting: The uploaded images and the final swapped images are hosted securely on Cloudinary.
 
-Download Results - Get source, target, and swapped images
+Form Validation: The application includes robust server-side validation for user input and file uploads.
 
-Responsive Design - Works on desktop and mobile
+Rate Limiting: Includes basic rate-limiting to prevent abuse.
 
-🚀 Quick Start
 Prerequisites
-Node.js (v18+)
+Before you begin, ensure you have the following accounts and software installed:
 
-MongoDB
+Node.js & npm: Download and install from the official website.
 
-LightX API key
+MongoDB: You'll need a MongoDB database. You can use a local instance or a cloud-hosted one like MongoDB Atlas.
 
-Cloudinary account
+Cloudinary Account: Sign up for a free account to get your credentials.
 
-Installation
-Clone the repository
+LightX API Key: Sign up for the LightX API to obtain an API key for face swapping.
 
-bash
-git clone https://github.com/yourusername/face-swap-app.git
-cd face-swap-app
-Install dependencies
+Installation:
 
-bash
-npm install
-Set up environment variables
-Create .env file:
+1. Clone the repository
+   git clone <repository_url>
+   cd <repository_folder>
+2. Configure environment variables
+   Create a .env file in the root directory of your project with the following variables:
 
-text
 PORT=3000
-MONGODB_URI=mongodb://localhost:27017/face-swap-db
-LIGHTX_API_KEY=your_lightx_api_key
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-Start the application
 
-bash
-npm run dev
-Visit http://localhost:3000
+# MongoDB
 
-🎯 Usage
-Fill in your details (name, email, phone)
+MONGODB_URI="your_mongodb_connection_string"
 
-Upload source image (your photo)
+# Cloudinary
 
-Upload target image (style face)
+CLOUDINARY_CLOUD_NAME="your_cloudinary_cloud_name"
+CLOUDINARY_API_KEY="your_cloudinary_api_key"
+CLOUDINARY_API_SECRET="your_cloudinary_api_secret"
 
-Click "Create Face Swap"
+# LightX API
 
-Download your result
+LIGHTX_API_KEY="your_lightx_api_key"
+Note: Replace the placeholder values with your actual credentials.
 
-🛠️ Tech Stack
-Backend: Node.js, Express.js, MongoDB
+3. Install dependencies
+   Install the required npm packages by running:
+   npm install
 
-Frontend: HTML, CSS, JavaScript, EJS
+4. Run the application
+   Start the server using the following command:
+   node app.js
+   The application will now be running at http://localhost:3000.
 
-APIs: LightX API, Cloudinary
+##
 
-File Upload: Multer
+User View
+Navigate to http://localhost:3000 to access the face swap form.
 
-📁 Project Structure
-text
-├── controllers/ # Route handlers
-├── models/ # Database models
-├── routes/ # Express routes
-├── views/ # EJS templates
-├── public/ # Static files
-├── uploads/ # Temporary storage
-└── app.js # Main application
-🔧 API Endpoints
-GET / - Main form page
+Fill in your details and upload a source image and a target image.
 
-POST /submit - Handle form submission
+Click Submit to process the request. The application will display the final swapped image once complete.
 
-GET /submissions - List all submissions
+##
 
-GET /submissions/:id - View submission details
+Project Structure
 
-GET /download/:id/:type - Download images
+app.js: The main entry point of the application, responsible for setting up Express, middleware, and routes.
 
-📝 License
-MIT License
+routes/submissionRoutes.js: Defines all API endpoints for handling submissions, including file uploads and form processing.
 
-👨‍💻 Author
-Ashu Jha
+controllers/submissionController.js: Contains the logic for handling HTTP requests and responses for submissions.
 
-Email: silliconvally009@gmail.com
+models/submissionModel.js: Manages all database interactions with MongoDB.
 
-GitHub: @yourusername
+config/db.js: Handles the connection to the MongoDB database.
 
-⭐ Star this repo if you found it helpful!
+config/cloudinary.js: Configures and manages all interactions with the Cloudinary image hosting service.
+
+utils/faceSwapApi.js: A wrapper for the external LightX API, handling the face swap requests and polling for results.
+
+public/: Contains static assets like stylesheets and client-side JavaScript.
+
+views/: Houses the EJS templates for rendering HTML pages.
