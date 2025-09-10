@@ -197,12 +197,6 @@ router.get(
   submissionController.downloadImage
 );
 
-router.delete(
-  "/admin/submissions/:id",
-  rateLimit(10, 15 * 60 * 1000),
-  submissionController.deleteSubmission
-);
-
 router.get("/admin/status", submissionController.getAPIStatus);
 
 router.get("/health", submissionController.healthCheck);
