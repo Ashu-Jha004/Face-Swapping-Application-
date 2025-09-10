@@ -1,0 +1,42 @@
+{
+    "task": " Help me buid the web application based on the prompt.",
+    "process": " Whole development process is split into mutiple process, each process has multiple steps, you  have to ask for permission after each step.",
+    "prompt": "Goal:
+
+Build a server-rendered form app (EJS + Express) that accepts user info + a photo (camera or device; front/back selectable), sanitizes & validates input, sends the image to a Face swap API - https://www.lightxeditor.com/, stores the user record + swapped image in MongoDB Atlas, and exposes a page listing all submissions with download links of swapped images.
+Requirements:
+
+Tech stack: Node.js, Express, EJS, MongoDB native driver (no Mongoose or ORM).
+Client UI: Form with fields:
+Name, Email, Phone, Terms & Conditions checkbox.
+Image capture buttons: Use Camera (choose front/back) and Upload from device.
+Show preview before submit.
+Server flow (MVC):
+Separate routes, controllers, models folders/files.
+Model uses native MongoDB client to interact with Atlas.
+Controller handles validation/sanitization via middleware or model-level functions.
+Router wires endpoints.
+Validation rules:
+Name: alphabet only, length 4–30.
+Email: valid email format.
+Phone: exactly 10 digits (numeric only).
+T&C: must be checked.
+Image: required, max file size 2 MB, only jpg/png/jpeg formats allowed.
+Sanitization:
+Strip HTML tags from all inputs.
+Ensure values stored as plain strings (no raw HTML or scripts).
+ 
+Endpoints:
+GET / — Form page.
+POST /submit — Accept form + image, validate  sanitize swap face, store record.
+GET /submissions — Page showing list of submissions with name, email, phone, original image, and swapped image download link.
+GET /submissions/:id — (optional) single record view / image download.
+Evaluation Criteria:
+Code quality: modular readable documented.
+Security: correct validation sanitization safe DB usage.
+Error handling: correct use of status codes and messages.
+Documentation: README.md with setup env vars run steps and sample requests.
+Strict: Do not use Mongoose or any ORM — use the classic MongoDB driver.
+", "addition feature": " user have to option whwere they upload both image from device, image1: image of themselves and image 2: image where swappong occurs or they click image using camera and upload another image from device, every image will be store in clodinary, which than can be downloaded ",
+"condition":" I aready havde node js server and one index ejs file and one simple working project, uisng those you have to build the current project and start integration in current project"
+}

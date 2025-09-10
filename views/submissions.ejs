@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>All Face Swap Submissions</title>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background: #f4f7f9;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 1200px;
+        margin: auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgb(0 0 0 / 0.1);
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #333;
+      }
+      .stats-bar {
+        background-color: #e3f2fd;
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+      }
+      .stat-item {
+        text-align: center;
+      }
+      .stat-number {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #5271ff;
+        display: block;
+      }
+      .stat-label {
+        font-size: 0.9rem;
+        color: #666;
+      }
+      .error-message {
+        background-color: #ffe6e6;
+        color: #d32f2f;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .no-results {
+        text-align: center;
+        color: #777;
+        padding: 40px;
+        font-size: 1.1rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 25px;
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+      }
+      thead,
+      tbody,
+      tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+      }
+      th,
+      td {
+        border: 1.5px solid #ddd;
+        padding: 12px 8px;
+        text-align: center;
+        vertical-align: middle;
+        word-wrap: break-word;
+      }
+      th {
+        background: #5271ff;
+        color: white;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+      }
+      td {
+        font-size: 0.9rem;
+      }
+      tr:nth-child(even) {
+        background-color: #f8f9fa;
+      }
+
+      /* ✅ Enhanced clickable submission rows */
+      .submission-row {
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .submission-row:hover {
+        background-color: #e3f2fd !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(82, 113, 255, 0.15);
+      }
+
+      .name-link {
+        color: #5271ff;
+        font-weight: 700;
+        text-decoration: none;
+        display: block;
+        padding: 4px 0;
+      }
+
+      .name-link:hover {
+        text-decoration: underline;
+        color: #3a54d1;
+      }
+
+      .submission-preview {
+        margin-top: 4px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        font-size: 0.75rem;
+        color: #666;
+      }
+
+      .submission-row:hover .submission-preview {
+        opacity: 1;
+      }
+
+      .email-link,
+      .phone-link,
+      .date-link {
+        color: #333;
+        text-decoration: none;
+        display: block;
+        padding: 4px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+      }
+
+      .email-link:hover,
+      .phone-link:hover,
+      .date-link:hover {
+        background-color: rgba(82, 113, 255, 0.1);
+        color: #5271ff;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 4px;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .view-btn {
+        background: linear-gradient(135deg, #5271ff 0%, #667eea 100%);
+        color: white;
+        text-decoration: none;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-block;
+        margin-bottom: 2px;
+      }
+
+      .view-btn:hover {
+        background: linear-gradient(135deg, #3a54d1 0%, #5271ff 100%);
+        transform: translateY(-1px);
+      }
+
+      .download-link {
+        color: #28a745;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 4px;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+        position: relative;
+        z-index: 10;
+      }
+
+      .download-link:hover {
+        background-color: #28a745;
+        color: white;
+      }
+
+      .view-link {
+        color: #666;
+        text-decoration: none;
+        font-style: italic;
+      }
+
+      .view-link:hover {
+        color: #5271ff;
+        text-decoration: underline;
+      }
+
+      nav.pagination {
+        text-align: center;
+        margin-top: 20px;
+      }
+      nav.pagination a,
+      nav.pagination span {
+        margin: 0 5px;
+        padding: 8px 16px;
+        border: 2px solid #5271ff;
+        border-radius: 8px;
+        color: #5271ff;
+        text-decoration: none;
+        cursor: pointer;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s ease;
+      }
+      nav.pagination a:hover,
+      nav.pagination span.active {
+        background-color: #5271ff;
+        color: white;
+      }
+      nav.pagination span.disabled {
+        border-color: #ccc;
+        color: #ccc;
+        cursor: not-allowed;
+      }
+      .actions {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .btn {
+        background-color: #5271ff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+        margin: 0 5px;
+      }
+      .btn:hover {
+        background-color: #3a54d1;
+      }
+      @media (max-width: 768px) {
+        .container {
+          padding: 20px 15px;
+        }
+        table {
+          font-size: 0.8rem;
+        }
+        th,
+        td {
+          padding: 8px 4px;
+        }
+        .stats-bar {
+          gap: 15px;
+        }
+
+        .submission-row {
+          cursor: pointer;
+        }
+      }
+      /* Universal Navigation Styles */
+      .app-navigation {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 0;
+        margin: -20px -20px 30px -20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+      }
+
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: white;
+        font-weight: 700;
+        font-size: 1.2rem;
+      }
+
+      .nav-logo {
+        font-size: 1.8rem;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .nav-link {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        transform: translateY(-1px);
+      }
+
+      .nav-link.active {
+        background: rgba(255, 255, 255, 0.25);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+
+      /* Responsive Navigation */
+      @media (max-width: 768px) {
+        .nav-container {
+          flex-direction: column;
+          gap: 15px;
+          padding: 15px;
+        }
+
+        .nav-links {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 6px;
+        }
+
+        .nav-link {
+          padding: 6px 12px;
+          font-size: 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Universal Navigation Header -->
+      <div class="app-navigation">
+        <div class="nav-container">
+          <div class="nav-brand">
+            <span class="nav-logo">🎭</span>
+            <span class="nav-title">Face Swap Pro</span>
+          </div>
+
+          <nav class="nav-links">
+            <a
+              href="/"
+              class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>"
+            >
+              🏠 Create Face Swap
+            </a>
+            <a
+              href="/submissions"
+              class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'submissions' ? 'active' : '' %>"
+            >
+              📊 View All Submissions
+            </a>
+            <% if (typeof submission !== 'undefined' && submission &&
+            submission._id) { %>
+            <a
+              href="/submissions/<%= submission._id %>"
+              class="nav-link active"
+            >
+              📋 Current Details
+            </a>
+            <% } %>
+            <a href="/admin/status" class="nav-link"> 🔧 API Status </a>
+          </nav>
+        </div>
+      </div>
+
+      <h1>📊 Face Swap Submissions</h1>
+
+      <!-- ✅ FIXED - Safe error checking -->
+      <% if (typeof error !== 'undefined' && error) { %>
+      <div class="error-message">⚠️ <%= error %></div>
+      <% } %>
+
+      <!-- ✅ FIXED - Safe stats checking -->
+      <% if (typeof stats !== 'undefined' && stats) { %>
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-number"><%= stats.total || 0 %></span>
+          <span class="stat-label">Total Submissions</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number"><%= stats.today || 0 %></span>
+          <span class="stat-label">Today</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number"
+            ><%= typeof submissions !== 'undefined' ? submissions.length : 0
+            %></span
+          >
+          <span class="stat-label">Showing</span>
+        </div>
+      </div>
+      <% } %>
+
+      <div class="actions">
+        <a href="/" class="btn">➕ Create New Submission</a>
+        <a href="/admin/status" class="btn">🔧 API Status</a>
+      </div>
+
+      <!-- ✅ FIXED - Safe submissions checking -->
+      <% if (typeof submissions === 'undefined' || !submissions ||
+      submissions.length === 0) { %>
+      <div class="no-results">
+        <p>📭 No submissions found.</p>
+        <a href="/" class="btn">Create First Submission</a>
+      </div>
+      <% } else { %>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 15%">👤 Name</th>
+            <th style="width: 20%">📧 Email</th>
+            <th style="width: 12%">📱 Phone</th>
+            <th style="width: 12%">📸 Source</th>
+            <th style="width: 12%">🎭 Target</th>
+            <th style="width: 12%">✨ Result</th>
+            <th style="width: 17%">📅 Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% submissions.forEach(sub => { %>
+          <tr class="submission-row" data-href="/submissions/<%= sub._id %>">
+            <td>
+              <!-- ✅ Primary clickable name link -->
+              <a href="/submissions/<%= sub._id %>" class="name-link">
+                <strong><%= sub.name %></strong>
+              </a>
+              <div class="submission-preview">
+                <small>📋 Click to view full details</small>
+              </div>
+            </td>
+            <td>
+              <a href="/submissions/<%= sub._id %>" class="email-link">
+                <%= sub.email %>
+              </a>
+            </td>
+            <td>
+              <a href="/submissions/<%= sub._id %>" class="phone-link">
+                <%= sub.phone %>
+              </a>
+            </td>
+            <td>
+              <% if (sub.sourceImage && sub.sourceImage.url) { %>
+              <div class="action-buttons">
+                <a
+                  href="/submissions/<%= sub._id %>"
+                  class="view-btn"
+                  title="View Details"
+                >
+                  👁️ View
+                </a>
+                <a
+                  href="/download/<%= sub._id %>/source"
+                  class="download-link"
+                  onclick="event.stopPropagation();"
+                >
+                  📥 Download
+                </a>
+              </div>
+              <% } else { %>
+              <a href="/submissions/<%= sub._id %>" class="view-link">
+                <span style="color: #999">N/A - View Details</span>
+              </a>
+              <% } %>
+            </td>
+            <td>
+              <% if (sub.targetImage && sub.targetImage.url) { %>
+              <div class="action-buttons">
+                <a
+                  href="/submissions/<%= sub._id %>"
+                  class="view-btn"
+                  title="View Details"
+                >
+                  👁️ View
+                </a>
+                <a
+                  href="/download/<%= sub._id %>/target"
+                  class="download-link"
+                  onclick="event.stopPropagation();"
+                >
+                  📥 Download
+                </a>
+              </div>
+              <% } else { %>
+              <a href="/submissions/<%= sub._id %>" class="view-link">
+                <span style="color: #999">N/A - View Details</span>
+              </a>
+              <% } %>
+            </td>
+            <td>
+              <% if (sub.swappedImage && sub.swappedImage.url) { %>
+              <div class="action-buttons">
+                <a
+                  href="/submissions/<%= sub._id %>"
+                  class="view-btn"
+                  title="View Details"
+                >
+                  👁️ View
+                </a>
+                <a
+                  href="/download/<%= sub._id %>/swapped"
+                  class="download-link"
+                  onclick="event.stopPropagation();"
+                >
+                  📥 Download
+                </a>
+              </div>
+              <% } else { %>
+              <a href="/submissions/<%= sub._id %>" class="view-link">
+                <span style="color: #999">Processing - View Details</span>
+              </a>
+              <% } %>
+            </td>
+            <td>
+              <a href="/submissions/<%= sub._id %>" class="date-link">
+                <%= new Date(sub.createdAt).toLocaleDateString() %><br />
+                <small
+                  ><%= new Date(sub.createdAt).toLocaleTimeString() %></small
+                >
+              </a>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } %>
+
+      <nav class="pagination" aria-label="Submissions Pagination">
+        <!-- ✅ FIXED - Safe pagination variable checking -->
+        <% if (typeof hasPrevPage !== 'undefined' && hasPrevPage) { %>
+        <a href="/submissions?page=<%= prevPage %>">&larr; Previous</a>
+        <% } else { %>
+        <span class="disabled">&larr; Previous</span>
+        <% } %>
+
+        <span class="active"
+          >Page <%= typeof currentPage !== 'undefined' ? currentPage : 1
+          %></span
+        >
+
+        <% if (typeof hasNextPage !== 'undefined' && hasNextPage) { %>
+        <a href="/submissions?page=<%= nextPage %>">Next &rarr;</a>
+        <% } else { %>
+        <span class="disabled">Next &rarr;</span>
+        <% } %>
+      </nav>
+    </div>
+
+    <!-- ✅ Enhanced JavaScript for row clicking -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Make entire table rows clickable
+        const submissionRows = document.querySelectorAll(".submission-row");
+
+        submissionRows.forEach((row) => {
+          const href = row.getAttribute("data-href");
+
+          row.addEventListener("click", function (e) {
+            // Don't navigate if clicking on download links
+            if (e.target.closest(".download-link")) {
+              return;
+            }
+
+            // Navigate to submission details
+            if (href) {
+              window.location.href = href;
+            }
+          });
+        });
+
+        // Add keyboard navigation
+        submissionRows.forEach((row) => {
+          row.addEventListener("keypress", function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              const href = row.getAttribute("data-href");
+              if (href) {
+                window.location.href = href;
+              }
+            }
+          });
+
+          // Make rows focusable
+          row.setAttribute("tabindex", "0");
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "name": "face-swap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@google/genai": "^1.18.0",
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.11.0",
+    "cloudinary": "^2.7.0",
+    "compression": "^1.8.1",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^17.2.2",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "mongodb": "^6.19.0",
+    "multer": "^2.0.2",
+    "nodemon": "^3.1.10",
+    "sanitize-html": "^2.17.0"
+  }
+}

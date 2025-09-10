@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Submission Details - Face Swap App</title>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background: #f4f7f9;
+        padding: 20px;
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: auto;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+        font-size: 2.2rem;
+        font-weight: 700;
+      }
+
+      .error-message {
+        background-color: #ffe6e6;
+        color: #d32f2f;
+        padding: 18px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        text-align: center;
+        border: 1px solid #ffcdd2;
+        font-weight: 500;
+      }
+
+      /* Universal Navigation Styles */
+      .app-navigation {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 0;
+        margin: -20px -20px 30px -20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+      }
+
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: white;
+        font-weight: 700;
+        font-size: 1.2rem;
+      }
+
+      .nav-logo {
+        font-size: 1.8rem;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .nav-link {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        transform: translateY(-1px);
+      }
+
+      .nav-link.active {
+        background: rgba(255, 255, 255, 0.25);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+
+      /* ✅ Enhanced Breadcrumb Navigation */
+      .breadcrumb-nav {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        padding: 15px 25px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        font-size: 0.95rem;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .breadcrumb-item {
+        color: #5271ff;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .breadcrumb-item:hover:not(.active) {
+        text-decoration: underline;
+        color: #3a54d1;
+      }
+
+      .breadcrumb-item.active {
+        color: #2c3e50;
+        font-weight: 600;
+      }
+
+      .breadcrumb-separator {
+        margin: 0 10px;
+        color: #6c757d;
+        font-weight: 300;
+      }
+
+      /* ✅ Enhanced Action Buttons */
+      .action-bar {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        border: 2px solid;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
+
+      .back-btn {
+        color: #5271ff;
+        border-color: #5271ff;
+        background: white;
+      }
+
+      .back-btn:hover {
+        background-color: #5271ff;
+        color: white;
+        transform: translateX(-3px);
+      }
+
+      .share-btn {
+        color: #28a745;
+        border-color: #28a745;
+        background: white;
+      }
+
+      .share-btn:hover {
+        background-color: #28a745;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .print-btn {
+        color: #6f42c1;
+        border-color: #6f42c1;
+        background: white;
+      }
+
+      .print-btn:hover {
+        background-color: #6f42c1;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* ✅ FIXED - Perfect image sizing */
+      .download-section img {
+        max-width: 100%;
+        max-height: 350px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        margin: 15px auto;
+        display: block;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+      }
+
+      .download-section img:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      /* ✅ Image Modal for Full-Screen View */
+      .image-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+      }
+
+      .image-modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .close-modal:hover {
+        color: #ccc;
+      }
+
+      .info {
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 0;
+      }
+
+      .info strong {
+        min-width: 150px;
+        color: #2c3e50;
+        font-weight: 600;
+      }
+
+      .info span {
+        color: #34495e;
+        word-break: break-word;
+      }
+
+      .download-section {
+        margin-bottom: 30px;
+        padding: 25px;
+        background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
+        border-radius: 15px;
+        border: 1px solid #e9ecef;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .download-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #5271ff, #667eea);
+      }
+
+      .download-section h3 {
+        margin-top: 0;
+        margin-bottom: 18px;
+        color: #2c3e50;
+        font-size: 1.4rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .download-buttons {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+      }
+
+      a.download-link {
+        color: white;
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        font-weight: 600;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        font-size: 0.9rem;
+      }
+
+      a.download-link:hover {
+        background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+      }
+
+      .view-full-btn {
+        color: white;
+        background: linear-gradient(135deg, #5271ff 0%, #667eea 100%);
+        font-weight: 600;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(82, 113, 255, 0.3);
+        font-size: 0.9rem;
+        cursor: pointer;
+        border: none;
+      }
+
+      .view-full-btn:hover {
+        background: linear-gradient(135deg, #3a54d1 0%, #5271ff 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(82, 113, 255, 0.4);
+      }
+
+      .image-info {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 15px;
+        padding: 12px;
+        background-color: #f1f3f4;
+        border-radius: 8px;
+        border-left: 4px solid #5271ff;
+      }
+
+      .submission-meta {
+        background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%);
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        border: 1px solid #bbdefb;
+      }
+
+      .no-image-message {
+        text-align: center;
+        color: #6c757d;
+        font-style: italic;
+        padding: 30px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border: 2px dashed #dee2e6;
+      }
+
+      /* ✅ Success Message Styling */
+      .success-actions {
+        background: linear-gradient(135deg, #d4edda 0%, #f0fff4 100%);
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+        border: 1px solid #c3e6cb;
+      }
+
+      .success-actions h4 {
+        color: #155724;
+        margin-bottom: 15px;
+        font-size: 1.2rem;
+      }
+
+      /* Responsive Navigation */
+      @media (max-width: 768px) {
+        .nav-container {
+          flex-direction: column;
+          gap: 15px;
+          padding: 15px;
+        }
+
+        .nav-links {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 6px;
+        }
+
+        .nav-link {
+          padding: 6px 12px;
+          font-size: 0.8rem;
+        }
+
+        .container {
+          padding: 20px 15px;
+          margin: 10px;
+        }
+
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        .download-section {
+          padding: 20px;
+        }
+
+        .download-section img {
+          max-height: 250px;
+        }
+
+        .info {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .info strong {
+          min-width: auto;
+        }
+
+        .download-buttons {
+          justify-content: center;
+        }
+
+        a.download-link,
+        .view-full-btn {
+          padding: 10px 16px;
+          font-size: 0.85rem;
+        }
+
+        .action-bar {
+          justify-content: center;
+        }
+
+        .breadcrumb-nav {
+          padding: 12px 15px;
+          font-size: 0.85rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 10px;
+        }
+
+        .container {
+          padding: 15px;
+        }
+
+        .download-section img {
+          max-height: 200px;
+        }
+
+        h1 {
+          font-size: 1.6rem;
+        }
+
+        .download-section h3 {
+          font-size: 1.2rem;
+        }
+      }
+
+      /* Print Styles */
+      @media print {
+        .app-navigation,
+        .action-bar,
+        .download-buttons,
+        .breadcrumb-nav {
+          display: none;
+        }
+
+        body {
+          background: white;
+          padding: 0;
+        }
+
+        .container {
+          box-shadow: none;
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Universal Navigation Header -->
+      <div class="app-navigation">
+        <div class="nav-container">
+          <div class="nav-brand">
+            <span class="nav-logo">🎭</span>
+            <span class="nav-title">Face Swap Pro</span>
+          </div>
+
+          <nav class="nav-links">
+            <a
+              href="/"
+              class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>"
+            >
+              🏠 Create Face Swap
+            </a>
+            <a
+              href="/submissions"
+              class="nav-link <%= typeof pageContext !== 'undefined' && pageContext === 'submissions' ? 'active' : '' %>"
+            >
+              📊 View All Submissions
+            </a>
+            <% if (typeof submission !== 'undefined' && submission &&
+            submission._id) { %>
+            <a
+              href="/submissions/<%= submission._id %>"
+              class="nav-link <%= typeof currentPage !== 'undefined' && currentPage === 'details' ? 'active' : '' %>"
+            >
+              📋 Current Details
+            </a>
+            <% } %>
+            <a href="/admin/status" class="nav-link">🔧 API Status</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- ✅ Enhanced Breadcrumb Navigation -->
+      <% if (typeof breadcrumb !== 'undefined' && breadcrumb) { %>
+      <div class="breadcrumb-nav">
+        <a href="<%= breadcrumb.home %>" class="breadcrumb-item">🏠 Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="<%= breadcrumb.submissions %>" class="breadcrumb-item"
+          >📊 All Submissions</a
+        >
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">📋 <%= breadcrumb.current %></span>
+      </div>
+      <% } else { %>
+      <div class="breadcrumb-nav">
+        <a href="/" class="breadcrumb-item">🏠 Home</a>
+        <span class="breadcrumb-separator">›</span>
+        <a href="/submissions" class="breadcrumb-item">📊 All Submissions</a>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active">📋 Submission Details</span>
+      </div>
+      <% } %>
+
+      <!-- ✅ Enhanced Action Bar -->
+      <div class="action-bar">
+        <a href="/submissions" class="action-btn back-btn">
+          ← Back to Submissions
+        </a>
+        <% if (typeof submission !== 'undefined' && submission &&
+        submission._id) { %>
+        <button onclick="shareSubmission()" class="action-btn share-btn">
+          🔗 Share
+        </button>
+        <button onclick="window.print()" class="action-btn print-btn">
+          🖨️ Print
+        </button>
+        <% } %>
+      </div>
+
+      <h1>📋 Submission Details</h1>
+
+      <!-- ✅ FIXED - Safe error and submission checking -->
+      <% if (typeof error !== 'undefined' && error) { %>
+      <div class="error-message">⚠️ <%= error %></div>
+      <% } else if (typeof submission !== 'undefined' && submission) { %>
+
+      <!-- ✅ Success Actions (if just completed) -->
+      <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+      <div class="success-actions">
+        <h4>🎉 Face Swap Completed Successfully!</h4>
+        <p>
+          Your face swap has been processed and saved. You can download the
+          images below or share this page with others.
+        </p>
+      </div>
+      <% } %>
+
+      <div class="submission-meta">
+        <div class="info">
+          <strong>👤 Name:</strong>
+          <span><%= submission.name || 'N/A' %></span>
+        </div>
+        <div class="info">
+          <strong>📧 Email:</strong>
+          <span><%= submission.email || 'N/A' %></span>
+        </div>
+        <div class="info">
+          <strong>📱 Phone:</strong>
+          <span><%= submission.phone || 'N/A' %></span>
+        </div>
+        <div class="info">
+          <strong>✅ Terms Accepted:</strong>
+          <span><%= submission.terms ? "Yes" : "No" %></span>
+        </div>
+        <div class="info">
+          <strong>📅 Submitted At:</strong>
+          <span
+            ><%= submission.createdAt ? new
+            Date(submission.createdAt).toLocaleString() : 'Unknown' %></span
+          >
+        </div>
+        <div class="info">
+          <strong>🆔 Submission ID:</strong>
+          <span><%= submission._id || 'Unknown' %></span>
+        </div>
+      </div>
+
+      <div class="download-section">
+        <h3>📸 Source Image (Your Photo)</h3>
+        <div class="download-buttons">
+          <a
+            href="/download/<%= submission._id %>/source"
+            class="download-link"
+          >
+            📥 Download Source Image
+          </a>
+          <% if (submission.sourceImage && submission.sourceImage.url) { %>
+          <button
+            onclick="openImageModal('<%= submission.sourceImage.url %>', 'Source Image')"
+            class="view-full-btn"
+          >
+            🔍 View Full Size
+          </button>
+          <% } %>
+        </div>
+        <% if (submission.sourceImage && submission.sourceImage.url) { %>
+        <div class="image-info">
+          📊 Size: <%= submission.sourceImage.bytes ?
+          Math.round(submission.sourceImage.bytes / 1024) + 'KB' : 'Unknown' %>
+          | 🖼️ Format: <%= submission.sourceImage.format ?
+          submission.sourceImage.format.toUpperCase() : 'Unknown' %> | 📐
+          Dimensions: <%= submission.sourceImage.width &&
+          submission.sourceImage.height ? submission.sourceImage.width + '×' +
+          submission.sourceImage.height : 'Unknown' %>
+        </div>
+        <img
+          src="<%= submission.sourceImage.url %>"
+          alt="Source Image"
+          onclick="openImageModal('<%= submission.sourceImage.url %>', 'Source Image')"
+          title="Click to view full size"
+        />
+        <% } else { %>
+        <div class="no-image-message">📷 Source image not available</div>
+        <% } %>
+      </div>
+
+      <div class="download-section">
+        <h3>🎭 Target Image (Style Photo)</h3>
+        <div class="download-buttons">
+          <a
+            href="/download/<%= submission._id %>/target"
+            class="download-link"
+          >
+            📥 Download Target Image
+          </a>
+          <% if (submission.targetImage && submission.targetImage.url) { %>
+          <button
+            onclick="openImageModal('<%= submission.targetImage.url %>', 'Target Image')"
+            class="view-full-btn"
+          >
+            🔍 View Full Size
+          </button>
+          <% } %>
+        </div>
+        <% if (submission.targetImage && submission.targetImage.url) { %>
+        <div class="image-info">
+          📊 Size: <%= submission.targetImage.bytes ?
+          Math.round(submission.targetImage.bytes / 1024) + 'KB' : 'Unknown' %>
+          | 🖼️ Format: <%= submission.targetImage.format ?
+          submission.targetImage.format.toUpperCase() : 'Unknown' %> | 📐
+          Dimensions: <%= submission.targetImage.width &&
+          submission.targetImage.height ? submission.targetImage.width + '×' +
+          submission.targetImage.height : 'Unknown' %>
+        </div>
+        <img
+          src="<%= submission.targetImage.url %>"
+          alt="Target Image"
+          onclick="openImageModal('<%= submission.targetImage.url %>', 'Target Image')"
+          title="Click to view full size"
+        />
+        <% } else { %>
+        <div class="no-image-message">🎭 Target image not available</div>
+        <% } %>
+      </div>
+
+      <div class="download-section">
+        <h3>✨ Face Swap Result</h3>
+        <div class="download-buttons">
+          <a
+            href="/download/<%= submission._id %>/swapped"
+            class="download-link"
+          >
+            📥 Download Result Image
+          </a>
+          <% if (submission.swappedImage && submission.swappedImage.url) { %>
+          <button
+            onclick="openImageModal('<%= submission.swappedImage.url %>', 'Face Swap Result')"
+            class="view-full-btn"
+          >
+            🔍 View Full Size
+          </button>
+          <% } %>
+        </div>
+        <% if (submission.swappedImage && submission.swappedImage.url) { %>
+        <div class="image-info">
+          📊 Size: <%= submission.swappedImage.bytes ?
+          Math.round(submission.swappedImage.bytes / 1024) + 'KB' : 'Unknown' %>
+          | 🖼️ Format: <%= submission.swappedImage.format ?
+          submission.swappedImage.format.toUpperCase() : 'Unknown' %> | 📐
+          Dimensions: <%= submission.swappedImage.width &&
+          submission.swappedImage.height ? submission.swappedImage.width + '×' +
+          submission.swappedImage.height : 'Unknown' %>
+        </div>
+        <img
+          src="<%= submission.swappedImage.url %>"
+          alt="Face Swap Result"
+          onclick="openImageModal('<%= submission.swappedImage.url %>', 'Face Swap Result')"
+          title="Click to view full size"
+        />
+        <% } else { %>
+        <div class="no-image-message">
+          ⏳ Result image not available or still processing
+        </div>
+        <% } %>
+      </div>
+
+      <% } else { %>
+      <div class="error-message">⚠️ Submission not found or invalid.</div>
+      <% } %>
+    </div>
+
+    <!-- ✅ Image Modal for Full-Screen View -->
+    <div id="imageModal" class="image-modal" onclick="closeImageModal()">
+      <span class="close-modal" onclick="closeImageModal()">&times;</span>
+      <img id="modalImage" class="modal-content" alt="Full Size Image" />
+    </div>
+
+    <!-- ✅ Enhanced JavaScript Functionality -->
+    <script>
+      // Image Modal Functions
+      function openImageModal(imageUrl, altText) {
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        modal.classList.add("active");
+        modalImg.src = imageUrl;
+        modalImg.alt = altText;
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeImageModal() {
+        const modal = document.getElementById("imageModal");
+        modal.classList.remove("active");
+        document.body.style.overflow = "auto";
+      }
+
+      // Close modal on Escape key
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeImageModal();
+        }
+      });
+
+      // Share Submission Function
+      function shareSubmission() {
+        const url = window.location.href;
+        const title = "Check out my Face Swap result!";
+
+        if (navigator.share) {
+          // Use Web Share API if available (mobile devices)
+          navigator
+            .share({
+              title: title,
+              url: url,
+            })
+            .then(() => {
+              console.log("Shared successfully");
+            })
+            .catch((error) => {
+              console.error("Error sharing:", error);
+              fallbackShare(url, title);
+            });
+        } else {
+          fallbackShare(url, title);
+        }
+      }
+
+      function fallbackShare(url, title) {
+        // Fallback: Copy to clipboard
+        if (navigator.clipboard) {
+          navigator.clipboard
+            .writeText(url)
+            .then(() => {
+              showNotification("🔗 Link copied to clipboard!", "success");
+            })
+            .catch(() => {
+              showShareDialog(url, title);
+            });
+        } else {
+          showShareDialog(url, title);
+        }
+      }
+
+      function showShareDialog(url, title) {
+        const shareText = `${title}\n${url}`;
+        const textarea = document.createElement("textarea");
+        textarea.value = shareText;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        showNotification("🔗 Share link copied to clipboard!", "success");
+      }
+
+      function showNotification(message, type = "info") {
+        // Create notification element
+        const notification = document.createElement("div");
+        notification.className = `notification notification-${type}`;
+        notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === "success" ? "#d4edda" : "#d1ecf1"};
+        color: ${type === "success" ? "#155724" : "#0c5460"};
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 1001;
+        font-weight: 600;
+        border: 1px solid ${type === "success" ? "#c3e6cb" : "#bee5eb"};
+      `;
+        notification.textContent = message;
+
+        document.body.appendChild(notification);
+
+        // Remove notification after 3 seconds
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 3000);
+      }
+
+      // Add loading states to download buttons
+      document.addEventListener("DOMContentLoaded", function () {
+        const downloadLinks = document.querySelectorAll(".download-link");
+        downloadLinks.forEach((link) => {
+          link.addEventListener("click", function () {
+            const originalText = this.textContent;
+            this.style.opacity = "0.7";
+            this.textContent = "⏳ Starting download...";
+
+            setTimeout(() => {
+              this.style.opacity = "1";
+              this.textContent = originalText;
+              showNotification("📥 Download started!", "success");
+            }, 1500);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

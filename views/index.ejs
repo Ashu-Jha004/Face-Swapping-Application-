@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Face Swap App - AI-Powered Face Swapping</title>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f4f7f9;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+      }
+      .container {
+        background: #fff;
+        padding: 25px 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgb(0 0 0 / 0.1);
+        max-width: 680px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 24px;
+        color: #333;
+      }
+
+      /* Universal Navigation Styles */
+      .app-navigation {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 0;
+        margin: -25px -40px 30px -40px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+      }
+
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: white;
+        font-weight: 700;
+        font-size: 1.2rem;
+      }
+
+      .nav-logo {
+        font-size: 1.8rem;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .nav-link {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        transform: translateY(-1px);
+      }
+
+      .nav-link.active {
+        background: rgba(255, 255, 255, 0.25);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+
+      /* Quick Actions Bar */
+      .quick-actions {
+        text-align: center;
+        margin-bottom: 25px;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .quick-actions a {
+        color: #5271ff;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 10px 16px;
+        border: 2px solid #5271ff;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .quick-actions a:hover {
+        background-color: #5271ff;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* Message boxes */
+      .message-box {
+        padding: 15px;
+        text-align: center;
+        font-size: 0.95rem;
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+      .error-message {
+        background-color: #ffe6e6;
+        color: #d32f2f;
+        border: 1px solid #ffcdd2;
+      }
+      .success-message {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .info-message {
+        background-color: #f9e79f;
+        color: #7d6608;
+        border: 1px solid #f4d03f;
+      }
+
+      /* Form styling */
+      label {
+        font-weight: 600;
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 6px;
+        color: #555;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"],
+      input[type="file"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1.8px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        outline-offset: 2px;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+      }
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      input[type="tel"]:focus,
+      input[type="file"]:focus {
+        border-color: #5271ff;
+        outline: none;
+      }
+      input.error {
+        border-color: #d32f2f;
+      }
+      .checkbox-container {
+        margin-top: 15px;
+        font-weight: normal;
+        color: #555;
+        display: flex;
+        align-items: center;
+      }
+      .checkbox-container input[type="checkbox"] {
+        margin-right: 8px;
+        cursor: pointer;
+      }
+      .btn-group {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .btn-group button {
+        background-color: #5271ff;
+        border: none;
+        color: white;
+        padding: 10px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+        flex: 1 1 45%;
+        min-width: 140px;
+      }
+      .btn-group button:hover {
+        background-color: #3a54d1;
+      }
+      .btn-group button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+      .image-section {
+        margin-top: 20px;
+      }
+      .image-section h3 {
+        margin-bottom: 8px;
+        color: #444;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      #video1,
+      #video2,
+      #preview1,
+      #preview2 {
+        display: block;
+        margin: 10px auto 5px auto;
+        border-radius: 8px;
+        max-width: 100%;
+        max-height: 280px;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+        cursor: pointer;
+      }
+      #canvas1,
+      #canvas2 {
+        display: none;
+      }
+      button[type="submit"] {
+        margin-top: 25px;
+        background-color: #27ae60;
+        padding: 12px;
+        width: 100%;
+        font-size: 1.1rem;
+        border-radius: 10px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-weight: 700;
+        transition: background-color 0.3s ease;
+        position: relative;
+      }
+      button[type="submit"]:hover:not(:disabled) {
+        background-color: #1e8449;
+      }
+      button[type="submit"]:disabled {
+        background-color: #95a5a6;
+        cursor: not-allowed;
+      }
+      .processing {
+        display: none;
+        margin-top: 20px;
+        text-align: center;
+        padding: 20px;
+        background-color: #e3f2fd;
+        border-radius: 10px;
+        border: 1px solid #bbdefb;
+      }
+      .processing.active {
+        display: block;
+      }
+      .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #5271ff;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 15px;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      #swapped-result {
+        margin-top: 25px;
+        padding: 20px;
+        background-color: #e8f5e8;
+        border-radius: 12px;
+        border: 1px solid #c8e6c9;
+        text-align: center;
+      }
+      #swapped-image {
+        display: block;
+        max-width: 100%;
+        margin: 15px auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+      .result-actions {
+        margin-top: 15px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .result-actions a {
+        background-color: #28a745;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+      }
+      .result-actions a:hover {
+        background-color: #218838;
+      }
+
+      /* Responsive Navigation */
+      @media (max-width: 768px) {
+        .nav-container {
+          flex-direction: column;
+          gap: 15px;
+          padding: 15px;
+        }
+
+        .nav-links {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 6px;
+        }
+
+        .nav-link {
+          padding: 6px 12px;
+          font-size: 0.8rem;
+        }
+
+        .container {
+          padding: 20px 20px;
+          margin: 10px;
+        }
+
+        .app-navigation {
+          margin: -20px -20px 30px -20px;
+        }
+
+        .quick-actions {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .btn-group {
+          flex-direction: column;
+        }
+        .btn-group button {
+          flex: 1 1 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Universal Navigation Header -->
+      <div class="app-navigation">
+        <div class="nav-container">
+          <div class="nav-brand">
+            <span class="nav-logo">🎭</span>
+            <span class="nav-title">Face Swap Pro</span>
+          </div>
+
+          <nav class="nav-links">
+            <a href="/" class="nav-link active">🏠 Create Face Swap</a>
+            <a href="/submissions" class="nav-link">📊 View All Submissions</a>
+            <a href="/health" class="nav-link">🔧 System Status</a>
+          </nav>
+        </div>
+      </div>
+
+      <h1>🎭 AI Face Swap Application</h1>
+
+      <!-- Quick Actions Bar -->
+      <div class="quick-actions">
+        <a href="/submissions">📊 View All Submissions</a>
+        <a href="/health">🔧 System Status</a>
+      </div>
+
+      <!-- Success Message -->
+      <% if (typeof submissionId !== 'undefined' && submissionId) { %>
+      <div class="message-box success-message">
+        ✅ Face swap completed successfully!
+        <br />
+        <a
+          href="/submissions/<%= submissionId %>"
+          style="color: #155724; font-weight: bold"
+          >View Full Details</a
+        >
+        |
+        <a href="/submissions" style="color: #155724; font-weight: bold"
+          >All Submissions</a
+        >
+      </div>
+      <% } %>
+
+      <!-- Error Message -->
+      <% if (typeof error !== 'undefined' && error) { %>
+      <div class="message-box error-message">⚠️ <%= error %></div>
+      <% } %>
+
+      <!-- Info Message Box (for JavaScript messages) -->
+      <div
+        id="message-box"
+        class="message-box info-message"
+        style="display: none"
+      ></div>
+
+      <form
+        id="userForm"
+        action="/submit"
+        method="POST"
+        enctype="multipart/form-data"
+        novalidate
+      >
+        <label for="name">👤 Name:</label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          required
+          minlength="4"
+          maxlength="30"
+          pattern="[A-Za-z\s]+"
+          placeholder="Enter your full name (4-30 characters)"
+          value="<%= typeof oldInput !== 'undefined' && oldInput && oldInput.name ? oldInput.name : '' %>"
+        />
+
+        <label for="email">📧 Email:</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          required
+          placeholder="example@example.com"
+          value="<%= typeof oldInput !== 'undefined' && oldInput && oldInput.email ? oldInput.email : '' %>"
+        />
+
+        <label for="phone">📱 Phone:</label>
+        <input
+          type="tel"
+          name="phone"
+          id="phone"
+          required
+          pattern="\\d{10}"
+          maxlength="10"
+          placeholder="10-digit number (e.g., 9876543210)"
+          value="<%= typeof oldInput !== 'undefined' && oldInput && oldInput.phone ? oldInput.phone : '' %>"
+        />
+
+        <div class="checkbox-container">
+          <label>
+            <input type="checkbox" name="terms" id="terms" required />
+            ✅ I accept the Terms & Conditions
+          </label>
+        </div>
+
+        <!-- Source Image section -->
+        <section class="image-section">
+          <h3>📸 Source Image (Your Photo)</h3>
+          <div class="btn-group">
+            <button type="button" id="frontCameraBtn1">📱 Front Camera</button>
+            <button type="button" id="backCameraBtn1">📷 Back Camera</button>
+          </div>
+          <label for="uploadImage1" style="margin-top: 10px">
+            Or Upload Source Image:
+          </label>
+          <input
+            type="file"
+            id="uploadImage1"
+            name="source"
+            accept="image/jpeg,image/png,image/jpg"
+            required
+          />
+          <video
+            id="video1"
+            width="300"
+            height="225"
+            autoplay
+            style="display: none"
+            title="Click video to capture photo"
+          ></video>
+          <canvas id="canvas1" width="300" height="225"></canvas>
+          <img
+            id="preview1"
+            src="https://placehold.co/400x300/e0e0e0/555?text=Source+Image+Preview"
+            alt="Source image preview"
+          />
+        </section>
+
+        <!-- Target Image section -->
+        <section class="image-section">
+          <h3>🎭 Target Image (Style Face Photo)</h3>
+          <div class="btn-group">
+            <button type="button" id="frontCameraBtn2">📱 Front Camera</button>
+            <button type="button" id="backCameraBtn2">📷 Back Camera</button>
+          </div>
+          <label for="uploadImage2" style="margin-top: 10px">
+            Or Upload Target Image:
+          </label>
+          <input
+            type="file"
+            id="uploadImage2"
+            name="target"
+            accept="image/jpeg,image/png,image/jpg"
+            required
+          />
+          <video
+            id="video2"
+            width="300"
+            height="225"
+            autoplay
+            style="display: none"
+            title="Click video to capture photo"
+          ></video>
+          <canvas id="canvas2" width="300" height="225"></canvas>
+          <img
+            id="preview2"
+            src="https://placehold.co/400x300/e0e0e0/555?text=Target+Image+Preview"
+            alt="Target image preview"
+          />
+        </section>
+
+        <button type="submit" id="submitBtn">🚀 Create Face Swap</button>
+      </form>
+
+      <!-- Processing Indicator -->
+      <div id="processing" class="processing">
+        <div class="spinner"></div>
+        <h3>🔄 Processing Your Face Swap...</h3>
+        <p>This may take up to 2 minutes. Please don't close this page.</p>
+        <div id="processingSteps">
+          <div>⏳ Validating images...</div>
+        </div>
+      </div>
+
+      <!-- Success Result -->
+      <% if (typeof swappedImage !== 'undefined' && swappedImage) { %>
+      <div id="swapped-result">
+        <h3>✨ Face Swap Result</h3>
+        <img
+          id="swapped-image"
+          src="<%= swappedImage %>"
+          alt="Face Swapped Result"
+        />
+        <div class="result-actions">
+          <% if (typeof submissionId !== 'undefined' && submissionId) { %>
+          <a href="/download/<%= submissionId %>/swapped">📥 Download Result</a>
+          <a href="/submissions/<%= submissionId %>">👁️ View Details</a>
+          <% } %>
+          <a href="/">🔄 Create Another</a>
+        </div>
+      </div>
+      <% } %>
+    </div>
+
+    <script>
+      const messageBox = document.getElementById("message-box");
+      const form = document.getElementById("userForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const processing = document.getElementById("processing");
+      const processingSteps = document.getElementById("processingSteps");
+
+      let processingInterval;
+
+      function showMessage(msg, type = "info") {
+        messageBox.textContent = msg;
+        messageBox.className = `message-box ${type}-message`;
+        messageBox.style.display = msg ? "block" : "none";
+
+        if (type === "info") {
+          setTimeout(() => {
+            messageBox.style.display = "none";
+          }, 5000);
+        }
+      }
+
+      function showProcessing() {
+        processing.classList.add("active");
+        submitBtn.disabled = true;
+        submitBtn.textContent = "🔄 Processing...";
+
+        const steps = [
+          "⏳ Validating images...",
+          "📤 Uploading to cloud storage...",
+          "🤖 Sending to AI face swap service...",
+          "⚡ Processing face swap...",
+          "📥 Downloading result...",
+          "💾 Saving to database...",
+        ];
+
+        let stepIndex = 0;
+        processingInterval = setInterval(() => {
+          if (stepIndex < steps.length) {
+            processingSteps.innerHTML = steps
+              .slice(0, stepIndex + 1)
+              .map((step) => `<div>${step}</div>`)
+              .join("");
+            stepIndex++;
+          }
+        }, 15000);
+      }
+
+      function hideProcessing() {
+        processing.classList.remove("active");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "🚀 Create Face Swap";
+        if (processingInterval) {
+          clearInterval(processingInterval);
+        }
+      }
+
+      // Form submission handling
+      form.addEventListener("submit", function (e) {
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const terms = document.getElementById("terms").checked;
+        const source = document.getElementById("uploadImage1").files[0];
+        const target = document.getElementById("uploadImage2").files[0];
+
+        let errors = [];
+
+        if (
+          !name ||
+          name.length < 4 ||
+          name.length > 30 ||
+          !/^[A-Za-z\s]+$/.test(name)
+        ) {
+          errors.push("Name must be 4-30 characters and contain only letters");
+        }
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          errors.push("Please enter a valid email address");
+        }
+
+        if (!phone || !/^\d{10}$/.test(phone)) {
+          errors.push("Phone must be exactly 10 digits");
+        }
+
+        if (!terms) {
+          errors.push("You must accept the Terms & Conditions");
+        }
+
+        if (!source) {
+          errors.push("Please select a source image");
+        }
+
+        if (!target) {
+          errors.push("Please select a target image");
+        }
+
+        if (errors.length > 0) {
+          e.preventDefault();
+          showMessage(errors.join(". "), "error");
+          return false;
+        }
+
+        showProcessing();
+      });
+
+      // Camera and image handling
+      const sections = [
+        {
+          frontBtn: document.getElementById("frontCameraBtn1"),
+          backBtn: document.getElementById("backCameraBtn1"),
+          uploadInput: document.getElementById("uploadImage1"),
+          video: document.getElementById("video1"),
+          canvas: document.getElementById("canvas1"),
+          preview: document.getElementById("preview1"),
+          currentStream: null,
+        },
+        {
+          frontBtn: document.getElementById("frontCameraBtn2"),
+          backBtn: document.getElementById("backCameraBtn2"),
+          uploadInput: document.getElementById("uploadImage2"),
+          video: document.getElementById("video2"),
+          canvas: document.getElementById("canvas2"),
+          preview: document.getElementById("preview2"),
+          currentStream: null,
+        },
+      ];
+
+      sections.forEach(
+        ({ frontBtn, backBtn, uploadInput, video, canvas, preview }, index) => {
+          function stopStream() {
+            if (sections[index].currentStream) {
+              sections[index].currentStream
+                .getTracks()
+                .forEach((track) => track.stop());
+              sections[index].currentStream = null;
+            }
+            video.style.display = "none";
+            canvas.style.display = "none";
+            video.srcObject = null;
+          }
+
+          function captureImage() {
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
+            preview.src = dataUrl;
+
+            fetch(dataUrl)
+              .then((res) => res.blob())
+              .then((blob) => {
+                const file = new File(
+                  [blob],
+                  `captured_${index}_${Date.now()}.jpg`,
+                  {
+                    type: "image/jpeg",
+                  }
+                );
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                uploadInput.files = dt.files;
+              });
+
+            stopStream();
+            showMessage(
+              `📸 Image captured for ${
+                index === 0 ? "Source" : "Target"
+              } successfully!`
+            );
+          }
+
+          function startCamera(facingMode) {
+            if (
+              !navigator.mediaDevices ||
+              !navigator.mediaDevices.getUserMedia
+            ) {
+              showMessage(
+                "📷 Camera API not supported on this browser.",
+                "error"
+              );
+              return;
+            }
+
+            const constraints = {
+              video: {
+                facingMode,
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
+              },
+            };
+
+            sections.forEach(({ currentStream }, i) => {
+              if (i !== index && currentStream) {
+                currentStream.getTracks().forEach((track) => track.stop());
+                sections[i].video.style.display = "none";
+                sections[i].currentStream = null;
+              }
+            });
+
+            stopStream();
+            showMessage("📷 Starting camera...");
+
+            navigator.mediaDevices
+              .getUserMedia(constraints)
+              .then((stream) => {
+                sections[index].currentStream = stream;
+                video.srcObject = stream;
+                video.style.display = "block";
+                video.onclick = captureImage;
+                showMessage(
+                  `📹 Camera started for ${
+                    index === 0 ? "Source" : "Target"
+                  } image. Click video to capture.`
+                );
+                preview.src =
+                  "https://placehold.co/400x300/e0e0e0/555?text=Click+Video+to+Capture";
+              })
+              .catch((err) => {
+                console.error("Camera error:", err);
+                showMessage(
+                  `❌ Camera access denied for ${
+                    index === 0 ? "Source" : "Target"
+                  } image: ${err.message}`,
+                  "error"
+                );
+              });
+          }
+
+          frontBtn.addEventListener("click", () => startCamera("user"));
+          backBtn.addEventListener("click", () => startCamera("environment"));
+
+          uploadInput.addEventListener("change", (e) => {
+            stopStream();
+            if (e.target.files && e.target.files[0]) {
+              const file = e.target.files[0];
+
+              if (file.size > 2 * 1024 * 1024) {
+                showMessage(
+                  `❌ ${
+                    index === 0 ? "Source" : "Target"
+                  } image too large. Max 2MB allowed.`,
+                  "error"
+                );
+                e.target.value = "";
+                return;
+              }
+
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                preview.src = e.target.result;
+                showMessage(
+                  `✅ ${
+                    index === 0 ? "Source" : "Target"
+                  } image uploaded successfully!`
+                );
+              };
+              reader.onerror = () => {
+                showMessage(
+                  `❌ Failed to load ${
+                    index === 0 ? "Source" : "Target"
+                  } image.`,
+                  "error"
+                );
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+        }
+      );
+
+      // Auto-hide messages after form errors are fixed
+      ["name", "email", "phone", "terms"].forEach((fieldId) => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+          field.addEventListener("input", () => {
+            field.classList.remove("error");
+          });
+        }
+      });
+
+      // Hide processing on page unload/reload
+      window.addEventListener("beforeunload", hideProcessing);
+    </script>
+  </body>
+</html>
