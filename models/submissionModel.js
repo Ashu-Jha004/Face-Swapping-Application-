@@ -209,26 +209,6 @@ class SubmissionModel {
     }
   }
 
-  async deleteSubmission(id) {
-    try {
-      const collection = await database.getCollection(this.collectionName);
-      const submission = await this.getSubmissionById(id);
-      if (submission.sourceImage?.publicId) {
-        await deleteFromCloudinary(submission.sourceImage.publicId);
-      }
-      if (submission.targetImage?.publicId) {
-        await deleteFromCloudinary(submission.targetImage.publicId);
-      }
-      if (submission.swappedImage?.publicId) {
-        await deleteFromCloudinary(submission.swappedImage.publicId);
-      }
-      const result = await collection.deleteOne({ _id: new ObjectId(id) });
-      return result.deletedCount > 0;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   cleanupLocalFiles(filePaths) {
     filePaths.forEach((filePath) => {
       if (fs.existsSync(filePath)) {

@@ -294,25 +294,6 @@ class SubmissionController {
     }
   }
 
-  async deleteSubmission(req, res) {
-    try {
-      const { id } = req.params;
-      if (!id || !ObjectId.isValid(id)) {
-        return res.status(400).json({ error: "Invalid submission ID format" });
-      }
-
-      const deleted = await submissionModel.deleteSubmission(id);
-      if (deleted) {
-        res.json({ message: "Submission deleted successfully" });
-      } else {
-        res.status(404).json({ error: "Submission not found" });
-      }
-    } catch (error) {
-      console.error("Error deleting submission:", error);
-      res.status(500).json({ error: "Delete failed. Please try again later." });
-    }
-  }
-
   async getAPIStatus(req, res) {
     try {
       const isConfigured = faceSwapAPI.isConfigured();
