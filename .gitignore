@@ -1,0 +1,9 @@
+# Ignore environment variable files
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Optional: ignore any other hidden env files
+*.env
