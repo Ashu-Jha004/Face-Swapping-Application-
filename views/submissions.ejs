@@ -482,6 +482,407 @@
           text-align: left;
         }
       }
+      <style > body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--primary-color);
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+      }
+      .container {
+        background: #fff;
+        padding: 25px 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgb(0 0 0 / 0.1);
+        max-width: 680px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 24px;
+        color: #333;
+      }
+
+      /* Universal Navigation Styles */
+      .app-navigation {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 0;
+        margin: -25px -40px 30px -40px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+      }
+
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: white;
+        font-weight: 700;
+        font-size: 1.2rem;
+      }
+
+      .nav-logo {
+        font-size: 1.8rem;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .nav-link {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        transform: translateY(-1px);
+      }
+
+      .nav-link.active {
+        background: rgba(255, 255, 255, 0.25);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+
+      /* Quick Actions Bar */
+      .quick-actions {
+        text-align: center;
+        margin-bottom: 25px;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .quick-actions a {
+        color: #5271ff;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 10px 16px;
+        border: 2px solid #5271ff;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .quick-actions a:hover {
+        background-color: #5271ff;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* Message boxes */
+      .message-box {
+        padding: 15px;
+        text-align: center;
+        font-size: 0.95rem;
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+      .error-message {
+        background-color: #ffe6e6;
+        color: #d32f2f;
+        border: 1px solid #ffcdd2;
+      }
+      .success-message {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .info-message {
+        background-color: #f9e79f;
+        color: #7d6608;
+        border: 1px solid #f4d03f;
+      }
+
+      /* Form styling */
+      label {
+        font-weight: 600;
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 6px;
+        color: #555;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"],
+      input[type="file"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1.8px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        outline-offset: 2px;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+      }
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      input[type="tel"]:focus,
+      input[type="file"]:focus {
+        border-color: #5271ff;
+        outline: none;
+      }
+      input.error {
+        border-color: #d32f2f;
+      }
+      .checkbox-container {
+        margin-top: 15px;
+        font-weight: normal;
+        color: #555;
+        display: flex;
+        align-items: center;
+      }
+      .checkbox-container input[type="checkbox"] {
+        margin-right: 8px;
+        cursor: pointer;
+      }
+      .btn-group {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .btn-group button {
+        background-color: #5271ff;
+        border: none;
+        color: white;
+        padding: 10px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+        flex: 1 1 45%;
+        min-width: 140px;
+      }
+      .btn-group button:hover {
+        background-color: #3a54d1;
+      }
+      .btn-group button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+      .image-section {
+        margin-top: 20px;
+      }
+      .image-section h3 {
+        margin-bottom: 8px;
+        color: #444;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      #video1,
+      #video2,
+      #preview1,
+      #preview2 {
+        display: block;
+        margin: 10px auto 5px auto;
+        border-radius: 8px;
+        max-width: 100%;
+        max-height: 280px;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+        cursor: pointer;
+      }
+      #canvas1,
+      #canvas2 {
+        display: none;
+      }
+      button[type="submit"] {
+        margin-top: 25px;
+        background-color: #27ae60;
+        padding: 12px;
+        width: 100%;
+        font-size: 1.1rem;
+        border-radius: 10px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-weight: 700;
+        transition: background-color 0.3s ease;
+        position: relative;
+      }
+      button[type="submit"]:hover:not(:disabled) {
+        background-color: #1e8449;
+      }
+      button[type="submit"]:disabled {
+        background-color: #95a5a6;
+        cursor: not-allowed;
+      }
+      .processing {
+        display: none;
+        margin-top: 20px;
+        text-align: center;
+        padding: 20px;
+        background-color: #e3f2fd;
+        border-radius: 10px;
+        border: 1px solid #bbdefb;
+      }
+      .processing.active {
+        display: block;
+      }
+      .spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #5271ff;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 15px;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      #swapped-result {
+        margin-top: 25px;
+        padding: 20px;
+        background-color: #e8f5e8;
+        border-radius: 12px;
+        border: 1px solid #c8e6c9;
+        text-align: center;
+      }
+      #swapped-image {
+        display: block;
+        max-width: 100%;
+        margin: 15px auto;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+      .result-actions {
+        margin-top: 15px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .result-actions a {
+        background-color: #28a745;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+      }
+      .result-actions a:hover {
+        background-color: #218838;
+      }
+
+      /* Responsive Navigation */
+      @media (max-width: 768px) {
+        .nav-container {
+          flex-direction: column;
+          gap: 15px;
+          padding: 15px;
+        }
+
+        .nav-links {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 6px;
+        }
+
+        .nav-link {
+          padding: 6px 12px;
+          font-size: 0.8rem;
+        }
+
+        .container {
+          padding: 20px 20px;
+          margin: 10px;
+        }
+
+        .app-navigation {
+          margin: -20px -20px 30px -20px;
+        }
+
+        .quick-actions {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .btn-group {
+          flex-direction: column;
+        }
+        .btn-group button {
+          flex: 1 1 100%;
+        }
+      }
+      :root {
+        --primary-color: #333;
+        --secondary-color: #fff;
+        --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        --padding-y: 1.5rem;
+        --font-size: 1rem;
+        --link-hover-color: #007bff;
+      }
+
+      .content {
+        flex-grow: 1;
+      }
+
+      .footer {
+        margin-top: 5px;
+        background-color: var(--primary-color);
+        color: var(--secondary-color);
+        text-align: center;
+        padding: var(--padding-y) 1rem;
+        font-size: var(--font-size);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .footer-text {
+        margin: 0;
+        font-weight: 400;
+      }
+
+      .footer-text a {
+        color: var(--secondary-color);
+        text-decoration: none;
+        transition: color 0.3s ease-in-out;
+      }
+
+      .footer-text a:hover {
+        color: var(--link-hover-color);
+      }
+
+      @media (max-width: 768px) {
+        .footer {
+          padding: 1rem;
+          font-size: 0.9rem;
+        }
+      }
     </style>
   </head>
   <body>
@@ -784,6 +1185,9 @@
         <span class="disabled">Next &rarr;</span>
         <% } %>
       </nav>
+      <footer class="footer">
+        <p class="footer-text">Made with ❤️ by <a href="#">Ashu Jha</a></p>
+      </footer>
     </div>
 
     <!-- Enhanced JavaScript for row clicking -->
